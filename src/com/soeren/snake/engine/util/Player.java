@@ -61,10 +61,11 @@ public class Player {
         for (int i = 0; i < 32; i++) {
             string += alphaNum.charAt(rand.nextInt(36));
         }
+        System.out.println(string);
         return string;
     }
 
-    public static Player getLocalPlayer(){
+    public static Player generateLocalPlayer(){
         try {
             return new Player(generateID(), InetAddress.getLocalHost());
         } catch (UnknownHostException e) {

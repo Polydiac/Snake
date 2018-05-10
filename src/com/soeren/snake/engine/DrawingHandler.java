@@ -41,7 +41,7 @@ public class DrawingHandler implements Updatable
             drawable.get(i).draw(frame);    
         }
 
-        bs.getBufferStrategy().show();
+        //bs.getBufferStrategy().show();
         bs.zeichneDich();
 
         for(int i = 0; i < drawable.size();i++){

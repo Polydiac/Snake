@@ -26,27 +26,21 @@ public class KeyboardSource implements InputSource {
         ArrayList<Movement> returnList = new ArrayList<>();
         Vector2D dir = new Vector2D(0,0);
         if(kb.isKeyPressed(UP)){
-            dir.plus(new Vector2D(0,1));
+            dir = dir.plus(new Vector2D(0,1));
         }
         if(kb.isKeyPressed(RIGHT)){
-            dir.plus(new Vector2D(1,0));
+            dir = dir.plus(new Vector2D(1,0));
         }
         if(kb.isKeyPressed(LEFT)){
-            dir.plus(new Vector2D(-1,0));
+            dir = dir.plus(new Vector2D(-1,0));
         }
         if(kb.isKeyPressed(DOWN)){
-            dir.plus(new Vector2D(0,0));
+            dir = dir.plus(new Vector2D(0,-1));
         }
 
-        if(dir.equals(new Vector2D(-1,0))){
+        if(dir.x == -1 && dir.y == 0){
             returnList.add(new Movement(Direction.LEFT));
-        } else if(dir.equals(new Vector2D(-1,1))){
-            returnList.add(new Movement(Direction.UP));
-        } else if(dir.equals(new Vector2D(0,1))){
-            returnList.add(new Movement(Direction.UP));
-        } else if(dir.equals(new Vector2D(1,1))){
-            returnList.add(new Movement(Direction.UP));
-        } else if(dir.equals(new Vector2D(1,0))){
+        } else if(dir.x == 1 && dir.y == 0){
             returnList.add(new Movement(Direction.RIGHT));
         } else {
             returnList.add(new Movement(Direction.UP));

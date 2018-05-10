@@ -2,6 +2,7 @@ package com.soeren.snake.engine.util.movement;
 
 import com.soeren.snake.engine.GameThread;
 import com.soeren.snake.engine.util.Player;
+import com.soeren.snake.engine.util.PlayerHandler;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class Movement {
 
     public Movement(Direction dir){
         direction = dir;
-        player = Player.getLocalPlayer();
+        player = PlayerHandler.getLocalPlayer();
         time = GameThread.getFrame();
     }
 

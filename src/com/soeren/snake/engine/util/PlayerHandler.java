@@ -6,10 +6,6 @@ public class PlayerHandler {
     private static ArrayList<Player> players = new ArrayList<Player>();
     private static Player localPlayer;
 
-    static {
-        localPlayer = Player.getLocalPlayer();
-        players.add(localPlayer);
-    }
 
     public static ArrayList<Player> getPlayers(){
         return players;
@@ -17,7 +13,8 @@ public class PlayerHandler {
 
     public static Player getLocalPlayer(){
         if(localPlayer == null){
-            localPlayer = Player.getLocalPlayer();
+            localPlayer = Player.generateLocalPlayer();
+            players.add(localPlayer);
         }
         return localPlayer;
     }

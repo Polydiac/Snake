@@ -9,7 +9,7 @@ import java.util.Map;
 
 //TODO: Player specific offload
 public class MovementHandler implements Updatable {
-    private static Map<Player, ArrayList<Movement>> movements = new HashMap<>();
+    private static Map<String, ArrayList<Movement>> movements = new HashMap<>();
     private static ArrayList<InputSource> sources = new ArrayList<>();
 
     public MovementHandler(){
@@ -28,9 +28,9 @@ public class MovementHandler implements Updatable {
             for (int j = 0; j < sourceDump.size(); j++) {
                 Player player = sourceDump.get(j).getPlayer();
                 if(movements.get(player)==null){
-                    movements.put(player, new ArrayList<Movement>());
+                    movements.put(player.getName(), new ArrayList<Movement>());
                 }
-                movements.get(player).add(sourceDump.get(j));
+                movements.get(player.getName()).add(sourceDump.get(j));
             }
         }
     }
@@ -40,8 +40,8 @@ public class MovementHandler implements Updatable {
     }
 
     public static ArrayList<Movement> getMovements(Player player){
-        ArrayList mov =  movements.get(player);
-        movements.put(player, new ArrayList<>());
+        ArrayList mov =  movements.get(player.getName());
+        movements.put(player.getName(), new ArrayList<>());
         return mov;
     }
 

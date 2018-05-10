@@ -74,6 +74,8 @@ public class GameThread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            } else {
+                System.out.println("OHNO");
             }
 
             frame = System.currentTimeMillis();
