@@ -1,12 +1,14 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util.movement;
 
-import java.lang.reflect.Array;
+import com.soeren.snake.engine.Updatable;
+import com.soeren.snake.engine.util.Player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 //TODO: Player specific offload
-public class MovementHandler implements Updateable {
+public class MovementHandler implements Updatable {
     private static Map<Player, ArrayList<Movement>> movements = new HashMap<>();
     private static ArrayList<InputSource> sources = new ArrayList<>();
 

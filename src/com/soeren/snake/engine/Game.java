@@ -1,24 +1,28 @@
 package com.soeren.snake.engine;
 
+import com.soeren.snake.engine.util.movement.KeyboardSource;
+import com.soeren.snake.engine.util.movement.MovementHandler;
+import com.soeren.snake.engine.util.Player;
+import com.soeren.snake.gameObjects.TestObject;
+
 import java.util.ArrayList;
 
 /**
  * @author 
  * @version 
  */
-public class Game implements Updateable
+public class Game implements Updatable
 {
-    private static ArrayList<Updateable> objects = new ArrayList<Updateable>();
+    private static ArrayList<Updatable> objects = new ArrayList<Updatable>();
 
     public void init(){
         objects.add(new MovementHandler());
         if(!GameThread.isServer) {
-            MovementHandler.registerInputSource(new KeyboardSource("wasd"));
+            MovementHandler.registerInputSource(new KeyboardSource("wasd", Player.getLocalPlayer()));
         }
 
-        for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).init();
-        }
+        GameThread.registerObject(new TestObject());
+
     }
 
     @Override
@@ -28,7 +32,7 @@ public class Game implements Updateable
         }
     }
 
-    public static void registerUpdateable(Updateable obj){
+    public static void registerUpdatable(Updatable obj){
         obj.init();
         objects.add(obj);
     }

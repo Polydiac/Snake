@@ -5,7 +5,7 @@ package com.soeren.snake.engine;
  * @version 
  */
 
-public interface Updateable
+public interface Updatable
 {
     void init();
     void update(long frame);

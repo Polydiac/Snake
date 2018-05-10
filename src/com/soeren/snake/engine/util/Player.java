@@ -1,10 +1,9 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 
 public class Player {
     String name;

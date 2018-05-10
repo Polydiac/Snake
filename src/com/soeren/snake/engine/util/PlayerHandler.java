@@ -1,6 +1,5 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class PlayerHandler {
@@ -17,6 +16,9 @@ public class PlayerHandler {
     }
 
     public static Player getLocalPlayer(){
+        if(localPlayer == null){
+            localPlayer = Player.getLocalPlayer();
+        }
         return localPlayer;
     }
 
@@ -31,4 +33,5 @@ public class PlayerHandler {
             }
         }
     }
+
 }

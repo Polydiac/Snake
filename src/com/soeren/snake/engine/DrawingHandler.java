@@ -2,14 +2,13 @@ package com.soeren.snake.engine;
 
 import java.util.ArrayList;
 
-import com.soeren.snake.util.KeyboardListener;
 import sum.kern.*;
 import java.awt.*;
 /**
  * @author 
  * @version 
  */
-public class DrawingHandler implements Updateable
+public class DrawingHandler implements Updatable
 {
     public static Fenster bs;
 
@@ -36,11 +35,17 @@ public class DrawingHandler implements Updateable
     }
     
     public void update(long frame){
+
+
+        for(int i = 0; i < drawable.size();i++){
+            drawable.get(i).draw(frame);    
+        }
+
         bs.getBufferStrategy().show();
         bs.zeichneDich();
 
         for(int i = 0; i < drawable.size();i++){
-            drawable.get(i).draw(frame);    
+            drawable.get(i).delete(frame);
         }
     }
     

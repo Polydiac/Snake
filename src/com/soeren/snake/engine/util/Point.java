@@ -1,4 +1,4 @@
-package com.soeren.snake.util;
+package com.soeren.snake.engine.util;
 
 import java.lang.Math;
 

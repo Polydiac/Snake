@@ -1,4 +1,4 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util.movement;
 
 import java.util.ArrayList;
 

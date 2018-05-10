@@ -1,4 +1,4 @@
-package com.soeren.snake.util;
+package com.soeren.snake.engine.util.movement;
 
   /**
  * Created by Soeren on 28.04.2017.
@@ -7,13 +7,12 @@ import java.util.Hashtable;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 public class KeyboardListener implements KeyListener {
     private Hashtable<Character, Boolean> keys;
 
     public KeyboardListener(){
         keys = new Hashtable<>();
-        char[] abc = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] abc = "abcdefghijklmnopqrstuvwxyz1234567890ß\u001B".toCharArray();
         for(int i = 0; i<abc.length; i++){
             keys.put(abc[i], false);
         }

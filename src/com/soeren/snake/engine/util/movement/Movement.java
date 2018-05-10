@@ -1,4 +1,7 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util.movement;
+
+import com.soeren.snake.engine.GameThread;
+import com.soeren.snake.engine.util.Player;
 
 import java.util.Objects;
 

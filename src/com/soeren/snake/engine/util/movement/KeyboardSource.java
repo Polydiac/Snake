@@ -1,19 +1,19 @@
-package com.soeren.snake.engine;
+package com.soeren.snake.engine.util.movement;
 
-import com.soeren.snake.util.KeyboardListener;
-import com.soeren.snake.util.Vector2D;
+import com.soeren.snake.engine.DrawingHandler;
+import com.soeren.snake.engine.util.Player;
+import com.soeren.snake.engine.util.Vector2D;
 
 import java.util.ArrayList;
 
-public class KeyboardSource implements InputSource{
-    public KeyboardListener kb;
+public class KeyboardSource implements InputSource {
     char UP, DOWN, LEFT, RIGHT;
-    Player associatedPlayer = Player.getLocalPlayer();
+    Player associatedPlayer;
 
 
-    public KeyboardSource(String keymap){
-        this.kb = new KeyboardListener();
-        DrawingHandler.bs.addKeyListener(kb);
+    public KeyboardSource(String keymap, Player player){
+        this.associatedPlayer = player;
+        DrawingHandler.bs.addKeyListener(KeyboardManager.getListener());
         UP = keymap.charAt(0);
         LEFT = keymap.charAt(1);
         DOWN = keymap.charAt(2);
@@ -22,6 +22,7 @@ public class KeyboardSource implements InputSource{
 
     @Override
     public ArrayList<Movement> getMovements() {
+        KeyboardListener kb = KeyboardManager.getListener();
         ArrayList<Movement> returnList = new ArrayList<>();
         Vector2D dir = new Vector2D(0,0);
         if(kb.isKeyPressed(UP)){
