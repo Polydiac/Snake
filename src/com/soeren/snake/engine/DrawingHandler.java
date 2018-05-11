@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import sum.kern.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * @author 
  * @version 
@@ -55,5 +58,14 @@ public class DrawingHandler implements Updatable
     
     public static void registerDrawable(Drawable obj){
         drawable.add(obj);
+        /*Collections.sort(drawable,new Comparator<Drawable>(){
+            @Override
+            public int compare(final Drawable lhs,Drawable rhs) {
+                return (Integer.compare(lhs.getLayer(), rhs.getLayer()));
+            }
+        });*/
+    }
+    public static void removeDrawable(Drawable obj) {
+        drawable.remove(obj);
     }
 }

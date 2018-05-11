@@ -27,6 +27,11 @@ public class TestObject implements Updatable, Drawable {
     }
 
     @Override
+    public int getLayer() {
+        return 0;
+    }
+
+    @Override
     public void init() {
         if(!GameThread.isServer){
             st = new Buntstift(DrawingHandler.bs);

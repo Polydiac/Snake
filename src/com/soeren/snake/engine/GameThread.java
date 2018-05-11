@@ -13,6 +13,9 @@ public class GameThread {
     public static boolean isServer = false;
     private static DrawingHandler draw;
     private static Game game;
+    public static int width = 1000;
+    public static int height = 1000;
+
     
     public GameThread(){
         this(1000, 1000, false);
@@ -26,8 +29,11 @@ public class GameThread {
         this(width, height, 60, pIsServer);
     }
 
-    public GameThread(int width, int height, int pframerate, boolean pIsServer){
+    public GameThread(int pwidth, int pheight, int pframerate, boolean pIsServer){
         isServer = pIsServer;
+
+        width = pwidth;
+        height = pheight;
 
         framerate = pframerate;
         interval = 1000/framerate;
@@ -109,5 +115,18 @@ public class GameThread {
     public static void registerObject(Updatable obj) {
         Game.registerUpdatable(obj);
     }
+
+    public static void removeObject(Drawable obj) {
+        Game.removeUpdatable(obj);
+        if(!isServer) {
+            DrawingHandler.removeDrawable(obj);
+        }
+    }
+
+    public static void removeObject(Updatable obj) {
+        Game.registerUpdatable(obj);
+    }
+
+
 
 }

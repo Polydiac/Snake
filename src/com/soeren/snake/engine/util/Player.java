@@ -58,7 +58,7 @@ public class Player {
         Random rand = new Random(System.currentTimeMillis());
         String alphaNum = "abcdefghijklmnopqrstuvwxyz1234567890";
         String string = "";
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 4; i++) {
             string += alphaNum.charAt(rand.nextInt(36));
         }
         System.out.println(string);

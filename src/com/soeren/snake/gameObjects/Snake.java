@@ -60,19 +60,20 @@ public class Snake implements Updatable
         pos = pos.plus(richtung.scalarMult(speed));
         parentNode.propagateMove(pos);
 
-        if((frame % 100) == 0){
-            addNode();
-        }
+        /*if((frame % 100) == 0){
+            System.out.println(frame);
+            //addNode();
+        }*/
     }
 
 
     public void addNode() {
         if(parentNode == null) {
-            parentNode = new SnakeNode(pos, radius, Color.GREEN, 0);
+            parentNode = new SnakeNode(pos, radius, Color.GREEN, 0, this);
             snake.add(parentNode);
             GameThread.registerObject(parentNode);
         } else {
-            snake.add(parentNode.add(radius*1.8/speed, radius, Color.GREEN));
+            snake.add(parentNode.add(radius*1.8/speed, radius, Color.GREEN, this));
         }
 
         length++;
