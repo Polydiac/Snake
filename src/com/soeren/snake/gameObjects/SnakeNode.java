@@ -23,10 +23,12 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
     SnakeNode nextNode = null;
     Snake parent;
     long offset;
+    boolean isFirst;
     CollisionCircle ccircle;
 
-    public SnakeNode(Vector2D startPos, double pRadius, Color pcolor, double offset, Snake pparent)
+    public SnakeNode(Vector2D startPos, double pRadius, Color pcolor, double offset, Snake pparent, boolean isFirst)
     {
+        this.isFirst = isFirst;
         parent = pparent;
         radius = pRadius;
         pos = startPos;
@@ -106,11 +108,22 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
 
     public SnakeNode add(double offset, double radius, Color color, Snake parent){
         if(nextNode == null){
-            nextNode = new SnakeNode(pos, radius, color, offset, parent);
+            nextNode = new SnakeNode(pos, radius, color, offset, parent, false);
             GameThread.registerObject(nextNode);
             return nextNode;
         } else {
             return nextNode.add(offset, radius, color, parent);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof SnakeNode){
+            return ((SnakeNode) obj).pos == pos && ((SnakeNode) obj).offset == offset &&
+                    ((SnakeNode) obj).radius == radius && ((SnakeNode) obj).parent == parent &&
+                    ((SnakeNode) obj).direction == direction;
+        } else {
+            return false;
         }
     }
 
@@ -124,6 +137,11 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
         if(obj instanceof Food && !((Food) obj).isEaten()){
 
             parent.addNode();
+        }
+        if(nextNode != null && nextNode.nextNode != null) {
+            if (obj instanceof SnakeNode && !nextNode.equals(obj) && !nextNode.nextNode.equals(obj) && isFirst) {
+                GameThread.stop();
+            }
         }
     }
 }

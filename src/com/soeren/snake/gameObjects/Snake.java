@@ -69,7 +69,7 @@ public class Snake implements Updatable
 
     public void addNode() {
         if(parentNode == null) {
-            parentNode = new SnakeNode(pos, radius, Color.GREEN, 0, this);
+            parentNode = new SnakeNode(pos, radius, Color.GREEN, 0, this, true);
             snake.add(parentNode);
             GameThread.registerObject(parentNode);
         } else {

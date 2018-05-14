@@ -42,8 +42,9 @@ public class GameThread {
         this.run();
     }
     
-    public void stop(){
+    public static void stop(){
         isRunning = false;
+        draw.stop();
     }
 
     public void init(){

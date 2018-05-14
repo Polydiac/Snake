@@ -45,7 +45,9 @@ public class DrawingHandler implements Updatable
         }
 
         //bs.getBufferStrategy().show();
-        bs.zeichneDich();
+        if(bs != null){
+            bs.zeichneDich();
+        }
 
         for(int i = 0; i < drawable.size();i++){
             drawable.get(i).delete(frame);
@@ -58,12 +60,12 @@ public class DrawingHandler implements Updatable
     
     public static void registerDrawable(Drawable obj){
         drawable.add(obj);
-        /*Collections.sort(drawable,new Comparator<Drawable>(){
+        Collections.sort(drawable,new Comparator<Drawable>(){
             @Override
             public int compare(final Drawable lhs,Drawable rhs) {
                 return (Integer.compare(lhs.getLayer(), rhs.getLayer()));
             }
-        });*/
+        });
     }
     public static void removeDrawable(Drawable obj) {
         drawable.remove(obj);
