@@ -7,6 +7,7 @@ package com.soeren.snake.engine;
 
 public interface Updatable
 {
+
     void init();
     void update(long frame);
 }

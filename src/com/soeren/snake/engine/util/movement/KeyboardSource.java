@@ -13,7 +13,7 @@ public class KeyboardSource implements InputSource {
 
     public KeyboardSource(String keymap, Player player){
         this.associatedPlayer = player;
-        DrawingHandler.bs.addKeyListener(KeyboardManager.getListener());
+
         UP = keymap.charAt(0);
         LEFT = keymap.charAt(1);
         DOWN = keymap.charAt(2);
@@ -39,11 +39,11 @@ public class KeyboardSource implements InputSource {
         }
 
         if(dir.x == -1 && dir.y == 0){
-            returnList.add(new Movement(Direction.LEFT));
+            returnList.add(new Movement(Direction.LEFT, associatedPlayer));
         } else if(dir.x == 1 && dir.y == 0){
-            returnList.add(new Movement(Direction.RIGHT));
+            returnList.add(new Movement(Direction.RIGHT, associatedPlayer));
         } else {
-            returnList.add(new Movement(Direction.UP));
+            returnList.add(new Movement(Direction.UP, associatedPlayer));
         }
         return returnList;
     }

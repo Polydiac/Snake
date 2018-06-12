@@ -5,7 +5,7 @@ package com.soeren.snake.engine;
  * @version 
  */
 
-public interface Drawable extends Updatable
+public interface Drawable<T> extends Updatable
 {
     void draw(long frame);
     void delete(long frame);
@@ -18,4 +18,6 @@ public interface Drawable extends Updatable
      *  2   Player
      *  3   Above Player
      */
+    void updateData(Drawable object);
+    String getId();
 }

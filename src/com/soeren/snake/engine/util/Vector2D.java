@@ -3,6 +3,7 @@ package com.soeren.snake.engine.util;
  
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.lang.Math;
 
 
@@ -14,7 +15,7 @@ import java.lang.Math;
  * @author Jadrian Miles
  * @version 20031122
  */
-public class Vector2D extends Point2D.Double {
+public class Vector2D extends Point2D.Double implements Serializable {
 
     /*
      * (non-Javadoc)

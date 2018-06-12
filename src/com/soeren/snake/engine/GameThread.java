@@ -3,7 +3,10 @@ package com.soeren.snake.engine; /**
  * @version 
  */
 
+import com.soeren.snake.engine.multiplayer.Client;
+import com.soeren.snake.engine.multiplayer.Server;
 import com.soeren.snake.engine.util.movement.KeyboardManager;
+import com.soeren.snake.engine.util.movement.MovementHandler;
 
 public class GameThread {
     private static long frame = System.currentTimeMillis();
@@ -11,6 +14,7 @@ public class GameThread {
     long interval;
     public static boolean isRunning = true;
     public static boolean isServer = false;
+    public static boolean isClient = false;
     private static DrawingHandler draw;
     private static Game game;
     public static int width = 1000;
@@ -18,19 +22,20 @@ public class GameThread {
 
     
     public GameThread(){
-        this(1000, 1000, false);
+        this(1000, 1000, false, true);
     }
 
-    public GameThread(boolean pIsServer) {
-        this(1000,1000,pIsServer);
+    public GameThread(boolean pIsServer, boolean pIsClient) {
+        this(1000,1000,pIsServer, pIsClient);
     }
 
-    public GameThread(int width, int height, boolean pIsServer){
-        this(width, height, 60, pIsServer);
+    public GameThread(int width, int height, boolean pIsServer, boolean pIsClient){
+        this(width, height, 60, pIsServer, pIsClient);
     }
 
-    public GameThread(int pwidth, int pheight, int pframerate, boolean pIsServer){
+    public GameThread(int pwidth, int pheight, int pframerate, boolean pIsServer, boolean pIsClient){
         isServer = pIsServer;
+        isClient = pIsClient;
 
         width = pwidth;
         height = pheight;
@@ -44,26 +49,36 @@ public class GameThread {
     
     public static void stop(){
         isRunning = false;
-        draw.stop();
+        if(isClient){
+            draw.stop();
+        }
+        if(isClient && !isServer){
+            Client.getClient().stopClient();
+        }
+        if(!isClient && isServer){
+            Server.getServer().stopServer();
+        }
+
     }
 
     public void init(){
-        if (!isServer){
-            draw = new DrawingHandler();
-        }
+
+        draw = new DrawingHandler();
+
         game = new Game();
 
-        if(!isServer){
-            draw.init();
-        }
+        draw.init();
+
         game.init();
     }
 
-    private void update(long frame){
-        if(!isServer) {
-            draw.update(frame);
+    protected void update(long frame){
+        MovementHandler.handler.update(frame);
+        draw.update(frame);
+        if(isServer){
+            game.update(frame);
         }
-        game.update(frame);
+
     }
     
 
@@ -86,8 +101,10 @@ public class GameThread {
             }
 
             frame = System.currentTimeMillis();
-            if(KeyboardManager.getListener().isKeyPressed('\u001B')){
-                stop();
+            if(GameThread.isClient){
+                if(KeyboardManager.getListener().isKeyPressed('\u001B')){
+                    stop();
+                }
             }
         }
     }
@@ -99,18 +116,21 @@ public class GameThread {
     public static void main(String args[]){
         if(args.length > 0) {
             if (args[0].contains("server")) {
-                new GameThread(true);
+                new GameThread(true, false);
+            }
+            if (args[0].contains("client")){
+                new GameThread(false, true);
             }
         } else {
-            new GameThread();
+            new GameThread(true, true);
         }
     }
 
     public static void registerObject(Drawable obj) {
         Game.registerUpdatable(obj);
-        if(!isServer) {
-            DrawingHandler.registerDrawable(obj);
-        }
+
+        DrawingHandler.registerDrawable(obj);
+
     }
 
     public static void registerObject(Updatable obj) {
@@ -119,13 +139,13 @@ public class GameThread {
 
     public static void removeObject(Drawable obj) {
         Game.removeUpdatable(obj);
-        if(!isServer) {
-            DrawingHandler.removeDrawable(obj);
-        }
+
+        DrawingHandler.removeDrawable(obj);
+
     }
 
     public static void removeObject(Updatable obj) {
-        Game.registerUpdatable(obj);
+        Game.removeUpdatable(obj);
     }
 
 

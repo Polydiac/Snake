@@ -2,7 +2,9 @@ package com.soeren.snake.engine;
 
 import com.soeren.snake.engine.util.Vector2D;
 
-public class CollisionCircle implements CollisionObject {
+import java.io.Serializable;
+
+public class CollisionCircle implements CollisionObject, Serializable {
     double radius;
     Vector2D pos;
 

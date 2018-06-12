@@ -2,6 +2,8 @@ package com.soeren.snake.engine;
 
 import java.util.ArrayList;
 
+import com.soeren.snake.engine.multiplayer.Client;
+import com.soeren.snake.engine.multiplayer.Server;
 import sum.kern.*;
 import java.awt.*;
 import java.util.Collections;
@@ -24,38 +26,68 @@ public class DrawingHandler implements Updatable
     }
     
     public void init(){
-        bs = new Fenster(width, height, true);
+        if(GameThread.isClient){
+            bs = new Fenster(width, height, true);
 
-        bs.setFocusable(true);
+            bs.setFocusable(true);
 
-        bs.requestFocus();
+            bs.requestFocus();
 
-        bs.setIgnoreRepaint(true);
-        bs.createBufferStrategy(2);
-        
-        bs.setBackground(new Color(255, 255, 255));
+            bs.setIgnoreRepaint(true);
+            bs.createBufferStrategy(2);
 
+            bs.setBackground(new Color(255, 255, 255));
+        }
     }
     
     public void update(long frame){
 
+        if(GameThread.isClient&&!GameThread.isServer){
+            System.out.println("I did an Update!");
+            if(drawable.size() == 0){
+                drawable = Client.getClient().getGameState();
+                for (Drawable obj :
+                        drawable) {
+                    obj.init();
+                }
+            } else {
+                for (Drawable newObj :
+                        Client.getClient().getGameState()) {
+                    for (Drawable oldObj :
+                            drawable) {
+                        oldObj.updateData(newObj);
+                    }
+                }
+            }
+            //drawable = Client.getClient().getGameState();
+        }
+        if(GameThread.isClient){
 
-        for(int i = 0; i < drawable.size();i++){
-            drawable.get(i).draw(frame);    
+            for(int i = 0; i < drawable.size();i++){
+                drawable.get(i).draw(frame);
+            }
+
+            //bs.getBufferStrategy().show();
+            if(bs != null){
+                bs.zeichneDich();
+                System.out.println("This is great");
+            }
+
+            for(int i = 0; i < drawable.size();i++){
+                drawable.get(i).delete(frame);
+            }
+        }
+        if(GameThread.isServer&&!GameThread.isClient){
+            Server.getServer().sendGameState(drawable);
         }
 
-        //bs.getBufferStrategy().show();
-        if(bs != null){
-            bs.zeichneDich();
-        }
-
-        for(int i = 0; i < drawable.size();i++){
-            drawable.get(i).delete(frame);
-        }
     }
     
     public void stop(){
-        bs.gibFrei();
+        if(GameThread.isClient){
+            bs.gibFrei();
+        }
+
     }
     
     public static void registerDrawable(Drawable obj){

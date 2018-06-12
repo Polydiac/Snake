@@ -1,11 +1,12 @@
 package com.soeren.snake.engine.util;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.Random;
 
-public class Player {
+public class Player implements Serializable {
     String name;
     InetAddress address;
 
@@ -54,20 +55,10 @@ public class Player {
 
     }
 
-    private static String generateID(){
-        Random rand = new Random(System.currentTimeMillis());
-        String alphaNum = "abcdefghijklmnopqrstuvwxyz1234567890";
-        String string = "";
-        for (int i = 0; i < 4; i++) {
-            string += alphaNum.charAt(rand.nextInt(36));
-        }
-        System.out.println(string);
-        return string;
-    }
 
     public static Player generateLocalPlayer(){
         try {
-            return new Player(generateID(), InetAddress.getLocalHost());
+            return new Player(UniqueID.generateID(), InetAddress.getLocalHost());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

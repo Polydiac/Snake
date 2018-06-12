@@ -4,16 +4,17 @@ import com.soeren.snake.engine.GameThread;
 import com.soeren.snake.engine.util.Player;
 import com.soeren.snake.engine.util.PlayerHandler;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Movement {
+public class Movement implements Serializable {
     Direction direction;
     Player player;
     long time;
 
-    public Movement(Direction dir){
+    public Movement(Direction dir, Player player){
         direction = dir;
-        player = PlayerHandler.getLocalPlayer();
+        this.player = player;
         time = GameThread.getFrame();
     }
 

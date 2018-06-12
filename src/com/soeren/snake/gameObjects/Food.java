@@ -2,16 +2,19 @@ package com.soeren.snake.gameObjects;
 
 import com.soeren.snake.engine.*;
 import com.soeren.snake.engine.util.CollisionHandler;
+import com.soeren.snake.engine.util.UniqueID;
 import com.soeren.snake.engine.util.Vector2D;
 import sum.kern.Buntstift;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Food implements Updatable, Drawable, Collidable {
+public class Food implements Updatable, Drawable<Food>, Collidable, Serializable {
 
+    String objectId;
     Vector2D pos;
     double radius;
-    Buntstift st;
+    transient Buntstift st;
     Color color;
     boolean eaten = false;
 
@@ -28,7 +31,7 @@ public class Food implements Updatable, Drawable, Collidable {
     }
 
     public Food(Vector2D pos, double radius, Color color) {
-
+        objectId = UniqueID.generateID();
         this.pos = pos;
         this.radius = radius;
         this.color = color;
@@ -55,12 +58,16 @@ public class Food implements Updatable, Drawable, Collidable {
 
     @Override
     public void init() {
-        if(!GameThread.isServer){
+        if(GameThread.isClient){
             st = new Buntstift(DrawingHandler.bs);
             st.setzeFuellMuster(1);
             st.setzeFarbe(color);
         }
         CollisionHandler.registerCollidable(this);
+    }
+
+    public String getId(){
+        return objectId;
     }
 
     @Override
@@ -74,10 +81,21 @@ public class Food implements Updatable, Drawable, Collidable {
     }
 
     @Override
+    public void updateData(Drawable object) {
+        if(object.getId().equals(objectId) && object instanceof Food){
+            Food specObject = (Food) object;
+            pos = specObject.pos;
+            radius = specObject.radius;
+            color = specObject.color;
+            eaten = specObject.eaten;
+        }
+    }
+
+    @Override
     public void collidedWith(Collidable obj) {
         if(obj instanceof SnakeNode){
             eaten = true;
-            if(!GameThread.isServer) {
+            if(GameThread.isClient) {
                 delete(GameThread.getFrame());
                 GameThread.removeObject(this);
             }

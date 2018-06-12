@@ -1,5 +1,7 @@
 package com.soeren.snake.engine.util;
 
+import com.soeren.snake.engine.GameThread;
+
 import java.util.ArrayList;
 
 public class PlayerHandler {
@@ -8,18 +10,25 @@ public class PlayerHandler {
 
 
     public static ArrayList<Player> getPlayers(){
+        getLocalPlayer();
         return players;
     }
 
     public static Player getLocalPlayer(){
-        if(localPlayer == null){
-            localPlayer = Player.generateLocalPlayer();
-            players.add(localPlayer);
+        if(GameThread.isClient) {
+            if(localPlayer == null){
+                localPlayer = Player.generateLocalPlayer();
+                players.add(localPlayer);
+            }
+            return localPlayer;
+        } else {
+            return null;
         }
-        return localPlayer;
+
     }
 
     public static void registerPlayer(Player player){
+        System.out.println(player.name);
         players.add(player);
     }
 

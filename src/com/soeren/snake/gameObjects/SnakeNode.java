@@ -2,21 +2,23 @@ package com.soeren.snake.gameObjects;
 
 import com.soeren.snake.engine.*;
 import com.soeren.snake.engine.util.CollisionHandler;
+import com.soeren.snake.engine.util.UniqueID;
 import com.soeren.snake.engine.util.Vector2D;
 import sum.kern.*;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * @author 
  * @version 
  */
-public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
+public class SnakeNode implements Updatable, Drawable<SnakeNode>, Animatable<SnakeNode>, Collidable, Serializable
 {
     Vector2D pos;
     Vector2D direction;
-    Buntstift st;
+    transient Buntstift st;
     double radius;
     Color color;
     ArrayList<Vector2D> movesLeft;
@@ -25,10 +27,12 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
     long offset;
     boolean isFirst;
     CollisionCircle ccircle;
+    String objectID;
 
     public SnakeNode(Vector2D startPos, double pRadius, Color pcolor, double offset, Snake pparent, boolean isFirst)
     {
         this.isFirst = isFirst;
+        objectID = UniqueID.generateID();
         parent = pparent;
         radius = pRadius;
         pos = startPos;
@@ -43,10 +47,24 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
     }
 
     @Override
+    public String getId(){
+        return objectID;
+    }
+
+    @Override
     public void draw(long frame) {
+        System.out.println("Great... Just great");
         st.hoch();
         st.bewegeBis(pos.x, pos.y);
         st.zeichneKreis(radius);
+        st.setzeFarbe(color.darker());
+        st.zeichneKreis(radius*0.7);
+
+        if(isFirst) {
+            st.setzeFarbe(Color.BLACK);
+            st.zeichneKreis(radius*0.1);
+        }
+        st.setzeFarbe(color);
     }
 
     @Override
@@ -62,14 +80,36 @@ public class SnakeNode implements Updatable, Drawable, Animatable, Collidable
     }
 
     @Override
+    public void updateData(Drawable object) {
+        if(object.getId().equals(objectID) && object instanceof SnakeNode){
+            System.out.println("This should be good");
+            SnakeNode nodeObj = (SnakeNode) object;
+            pos = nodeObj.pos;
+            direction = nodeObj.direction;
+            radius = nodeObj.radius;
+            color = nodeObj.color;
+            movesLeft = nodeObj.movesLeft;
+            nextNode = nodeObj.nextNode;
+            offset = nodeObj.offset;
+            isFirst = nodeObj.isFirst;
+            ccircle = nodeObj.ccircle;
+        }
+    }
+
+    @Override
     public void init() {
-        if(!GameThread.isServer){
+        if(GameThread.isClient){
             st = new Buntstift();
             st.setzeFarbe(color);
             st.setzeFuellMuster(1);
         }
-        ccircle = new CollisionCircle(radius, pos);
-        CollisionHandler.registerCollidable(this);
+        if(ccircle == null){
+            ccircle = new CollisionCircle(radius, pos);
+        }
+
+        if(GameThread.isServer){
+            CollisionHandler.registerCollidable(this);
+        }
     }
 
     @Override

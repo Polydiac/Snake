@@ -11,6 +11,8 @@ import java.util.Map;
 public class MovementHandler implements Updatable {
     private static Map<String, ArrayList<Movement>> movements = new HashMap<>();
     private static ArrayList<InputSource> sources = new ArrayList<>();
+    private static ArrayList<InputDestination> destinations = new ArrayList<>();
+    public static MovementHandler handler = new MovementHandler();
 
     public MovementHandler(){
 
@@ -25,12 +27,21 @@ public class MovementHandler implements Updatable {
     public void update(long frame) {
         for (int i = 0; i < sources.size(); i++) {
             ArrayList<Movement> sourceDump = sources.get(i).getMovements();
+
             for (int j = 0; j < sourceDump.size(); j++) {
+                Map<String, ArrayList<Movement>> tempMap = new HashMap<>();
                 Player player = sourceDump.get(j).getPlayer();
-                if(movements.get(player)==null){
+                if(movements.get(player.getName())==null){
                     movements.put(player.getName(), new ArrayList<Movement>());
                 }
                 movements.get(player.getName()).add(sourceDump.get(j));
+                if (!(sources.get(i) instanceof NetworkSource)){
+                    for (int k = 0; k < destinations.size(); k++) {
+
+                        destinations.get(k).sendMovement(sourceDump);
+
+                    }
+                }
             }
         }
     }
@@ -39,11 +50,16 @@ public class MovementHandler implements Updatable {
         sources.add(source);
     }
 
+    public static void registerDestination(InputDestination dest){
+        destinations.add(dest);
+    }
+
     public static ArrayList<Movement> getMovements(Player player){
         ArrayList mov =  movements.get(player.getName());
         movements.put(player.getName(), new ArrayList<>());
         return mov;
     }
+
 
 
 }

@@ -1,15 +1,21 @@
 package com.soeren.snake.gameObjects;
 
 import com.soeren.snake.engine.*;
+import com.soeren.snake.engine.util.UniqueID;
 import com.soeren.snake.engine.util.Vector2D;
 import sum.kern.Buntstift;
 
-public class TestObject implements Updatable, Drawable {
+public class TestObject implements Updatable, Drawable<TestObject> {
     Buntstift st;
     Vector2D pos;
+    String objectId;
 
     public TestObject(){
+        objectId = UniqueID.generateID();
+    }
 
+    public String getId(){
+        return objectId;
     }
 
 
@@ -32,8 +38,13 @@ public class TestObject implements Updatable, Drawable {
     }
 
     @Override
+    public void updateData(Drawable object) {
+        pos = ((TestObject)(object)).pos;
+    }
+
+    @Override
     public void init() {
-        if(!GameThread.isServer){
+        if(GameThread.isClient){
             st = new Buntstift(DrawingHandler.bs);
         }
         pos = new Vector2D(50,50);
